@@ -47,14 +47,41 @@ public class Ladis {
                 continue;
             }
 
-            user_inputs[input_count] = new Task(user_input);
-            input_count++;
+            if (user_input.startsWith("todo ")) {
+                String description = user_input.substring(5);
+                user_inputs[input_count++] = new Todo(description);
 
-            System.out.println("____________________________________________________________");
-            System.out.println("    " + "added: " + user_input);
-            System.out.println("____________________________________________________________");
+                System.out.println("____________________________________________________________");
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [T][ ] " + description);
+                System.out.println("Now you have " + input_count + " tasks in the list.");
+                System.out.println("____________________________________________________________");
+                continue;
+            }
+
+            if (user_input.startsWith("deadline ")) {
+                String[] parts = user_input.substring(9).split(" /by ");
+                user_inputs[input_count++] = new Deadline(parts[0], parts[1]);
+                System.out.println("____________________________________________________________");
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [D][ ] " + parts[0] + " (by: " + parts[1] + ")");
+                System.out.println("Now you have " + input_count + " tasks in the list.");
+                System.out.println("____________________________________________________________");
+                continue;
+            }
+
+            if (user_input.startsWith("event ")) {
+                String[] parts = user_input.substring(6).split(" /from | /to ");
+                user_inputs[input_count++] = new Event(parts[0], parts[1], parts[2]);
+                System.out.println("____________________________________________________________");
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  [E][ ] " + parts[0] +
+                        " (from: " + parts[1] + " to: " + parts[2] + ")");
+                System.out.println("Now you have " + input_count + " tasks in the list.");
+                System.out.println("____________________________________________________________");
+            }
         }
-        
+
         sc.close();
     }
 }
