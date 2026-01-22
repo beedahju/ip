@@ -1,9 +1,11 @@
 public abstract class Task {
     private final String description;
     private boolean isDone;
+    private TaskType taskType;
 
-    public Task(String description) {
+    public Task(String description, TaskType taskType) {
         this.description = description;
+        this.taskType = taskType;
         this.isDone = false;    
     }
 

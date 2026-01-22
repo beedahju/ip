@@ -3,14 +3,14 @@ public class Event extends Task {
     private final String endDate;
 
     public Event(String description, String startDate, String endDate) {
-        super(description);
+        super(description, TaskType.EVENT);
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
     @Override
     public String toString() {
-        return "[E]" + getStatusIcon() + " " + super.toString() + " (from: " + startDate + " to: " + endDate + ")";
+        return super.toString() + " (from: " + startDate + " to: " + endDate + ")";
     }
 
 }

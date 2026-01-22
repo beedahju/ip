@@ -2,12 +2,12 @@ public class Deadline extends Task {
     private final String deadlineDay;
 
     public Deadline(String description, String deadlineDay) {
-        super(description);
+        super(description, TaskType.DEADLINE);
         this.deadlineDay = deadlineDay;
     }
 
     @Override
     public String toString() {
-        return "[D]" + getStatusIcon() + " " + super.toString() + " (by: " + deadlineDay + ")";
+        return super.toString() + " (by: " + deadlineDay + ")";
     }
 }

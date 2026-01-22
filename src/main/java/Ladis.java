@@ -104,6 +104,7 @@ public class Ladis {
                             " (from: " + parts[1] + " to: " + parts[2] + ")");
                     System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                     System.out.println("____________________________________________________________");
+                    continue;
                 }
 
                 if (user_input.startsWith("delete")) {
@@ -120,13 +121,12 @@ public class Ladis {
                         System.out.println("  " + removed);
                         System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
-                        continue;
-
                     } catch (NumberFormatException e) {
                         throw new LadisExeception("Please provide a valid task number.");
                     }
-            }       
+            } else {      
                 throw new LadisExeception("I'm sorry, but I don't know what that means :-(");
+                }
             }
                 catch(LadisExeception e) {
                     System.out.println("____________________________________________________________");
