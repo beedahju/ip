@@ -1,7 +1,7 @@
 public abstract class Task {
-    private final String description;
-    private boolean isDone;
-    private final TaskType taskType;
+    protected final String description;
+    protected boolean isDone;
+    protected final TaskType taskType;
 
     public Task(String description, TaskType taskType) {
         this.description = description;
@@ -19,6 +19,22 @@ public abstract class Task {
 
     public void unmark() {
         isDone = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public String toFileString() {
+        return taskType.getIcon().replaceAll("[\\[\\]]", "") + " | " + (isDone ? "1" : "0") + " | " + description;
     }
 
     @Override
