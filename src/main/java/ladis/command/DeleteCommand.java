@@ -1,4 +1,11 @@
+package ladis.command;
+
 import java.io.IOException;
+import ladis.task.Task;
+import ladis.task.TaskList;
+import ladis.ui.UI;
+import ladis.storage.Storage;
+import ladis.exception.LadisException;
 
 public class DeleteCommand extends Command {
     private final int index;
@@ -8,9 +15,9 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public boolean execute(TaskList tasks, UI ui, Storage storage) throws LadisExeception {
+    public boolean execute(TaskList tasks, UI ui, Storage storage) throws LadisException {
         if (index < 0 || index >= tasks.size()) {
-            throw new LadisExeception("Very funny. Now give me a valid task number.");
+            throw new LadisException("Very funny. Now give me a valid task number.");
         }
         Task removed = tasks.removeTask(index);
         ui.showTaskRemoved(removed.toString(), tasks.size());
@@ -22,7 +29,7 @@ public class DeleteCommand extends Command {
         try {
             storage.save(tasks.getTasks());
         } catch (IOException e) {
-            ui.showWarning("Oops! Something went wrong while saving to disk.");
+            ui.showWarning("Could not save task to disk.");
         }
     }
 }

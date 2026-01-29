@@ -1,4 +1,7 @@
+package ladis.ui;
+
 import java.util.Scanner;
+import ladis.task.TaskList;
 
 public class UI {
     private final Scanner scanner;
