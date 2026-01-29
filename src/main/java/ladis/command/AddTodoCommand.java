@@ -1,4 +1,10 @@
+package ladis.command;
+
 import java.io.IOException;
+import ladis.task.TaskList;
+import ladis.task.Todo;
+import ladis.ui.UI;
+import ladis.storage.Storage;
 
 public class AddTodoCommand extends Command {
     private final String description;
@@ -19,7 +25,7 @@ public class AddTodoCommand extends Command {
         try {
             storage.save(tasks.getTasks());
         } catch (IOException e) {
-            ui.showWarning("Oops! Something went wrong while saving to disk.");
+            ui.showWarning("Could not save task to disk.");
         }
     }
 }

@@ -1,9 +1,16 @@
+package ladis.storage;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import ladis.exception.DateTimeParseException;
+import ladis.task.Deadline;
+import ladis.task.Event;
+import ladis.task.Task;
+import ladis.task.Todo;
 
 public class Storage {
     private final String filePath;
@@ -82,9 +89,7 @@ public class Storage {
             }
 
             return task;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        } catch (DateTimeParseException e) {
+        } catch (ArrayIndexOutOfBoundsException | DateTimeParseException e) {
             return null;
         }
     }

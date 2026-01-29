@@ -1,4 +1,7 @@
+package ladis.task;
+
 import java.util.ArrayList;
+import ladis.exception.LadisException;
 
 public class TaskList {
     private final ArrayList<Task> tasks;
@@ -27,19 +30,19 @@ public class TaskList {
         return tasks.size();
     }
 
-    public void markTask(int index) throws LadisExeception {
+    public void markTask(int index) throws LadisException {
         if (isValidIndex(index)) {
             tasks.get(index).mark();
         } else {
-            throw new LadisExeception("Very funny. Now give me a valid task number.");
+            throw new LadisException("Very funny. Now give me a valid task number.");
         }
     }
 
-    public void unmarkTask(int index) throws LadisExeception {
+    public void unmarkTask(int index) throws LadisException {
         if (isValidIndex(index)) {
             tasks.get(index).unmark();
         } else {
-            throw new LadisExeception("Very funny. Now give me a valid task number.");
+            throw new LadisException("Very funny. Now give me a valid task number.");
         }
     }
 

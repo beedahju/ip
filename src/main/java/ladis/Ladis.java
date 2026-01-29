@@ -1,4 +1,12 @@
+package ladis;
+
 import java.io.IOException;
+import ladis.storage.Storage;
+import ladis.task.TaskList;
+import ladis.ui.UI;
+import ladis.util.Parser;
+import ladis.command.Command;
+import ladis.exception.LadisException;
 
 public class Ladis {
     private final Storage storage;
@@ -28,7 +36,7 @@ public class Ladis {
                 String userInput = ui.readCommand();
                 Command command = parser.parse(userInput);
                 isExit = command.execute(tasks, ui, storage);
-            } catch (LadisExeception e) {
+            } catch (LadisException e) {
                 ui.showError(e.getMessage());
             }
         }
