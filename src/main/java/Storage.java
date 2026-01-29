@@ -82,7 +82,9 @@ public class Storage {
             }
 
             return task;
-        } catch (Exception e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        } catch (DateTimeParseException e) {
             return null;
         }
     }
