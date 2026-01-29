@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -5,10 +6,17 @@ public class Ladis {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> user_inputs = new ArrayList<>();
+        Storage storage = new Storage("./data/ladis.txt");
 
         System.out.println("____________________________________________________________");
         System.out.println("Hello! I'm Ladis\nWhat can I do for you?");
         System.out.println("____________________________________________________________");
+
+        try {
+            user_inputs = storage.load();
+        } catch (IOException e) {
+            System.out.println("Oops! Something went wrong when loading from disk!");
+        }
         
         while (true) {
             try{
@@ -40,6 +48,12 @@ public class Ladis {
                         System.out.println("____________________________________________________________");
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("    " + user_inputs.get(index));
+                        
+                        try {
+                            storage.save(user_inputs);
+                        } catch (IOException e) {
+                            System.out.println("Warning: Could not save task to disk.");
+                        }
                         continue;
                     } catch (NumberFormatException e) {
                         throw new LadisExeception("Very funny. Now give me a valid task number.");
@@ -56,6 +70,12 @@ public class Ladis {
                         System.out.println("____________________________________________________________");
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("    " + user_inputs.get(index));
+                        
+                        try {
+                            storage.save(user_inputs);
+                        } catch (IOException e) {
+                            System.out.println("Oops! Something went wrong when saving to disk!");
+                        }
                         continue;
                     } catch (NumberFormatException e) {
                         throw new LadisExeception("Very funny. Now give me a valid task number.");
@@ -74,6 +94,12 @@ public class Ladis {
                     System.out.println("  [T][ ] " + description);
                     System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                     System.out.println("____________________________________________________________");
+                    
+                    try {
+                        storage.save(user_inputs);
+                    } catch (IOException e) {
+                        System.out.println("Oops! Something went wrong when saving to disk!");
+                    }
                     continue;
                 }
 
@@ -89,6 +115,12 @@ public class Ladis {
                     System.out.println("  [D][ ] " + parts[0] + " (by: " + parts[1] + ")");
                     System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                     System.out.println("____________________________________________________________");
+                    
+                    try {
+                        storage.save(user_inputs);
+                    } catch (IOException e) {
+                        System.out.println("Oops! Something went wrong when saving to disk!");
+                    }
                     continue;
                 }
 
@@ -104,6 +136,12 @@ public class Ladis {
                             " (from: " + parts[1] + " to: " + parts[2] + ")");
                     System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                     System.out.println("____________________________________________________________");
+                    
+                    try {
+                        storage.save(user_inputs);
+                    } catch (IOException e) {
+                        System.out.println("Oops! Something went wrong when saving to disk!");
+                    }
                     continue;
                 }
 
@@ -121,6 +159,12 @@ public class Ladis {
                         System.out.println("  " + removed);
                         System.out.println("Now you have " + user_inputs.size() + " tasks in the list.");
                         System.out.println("____________________________________________________________");
+                        
+                        try {
+                            storage.save(user_inputs);
+                        } catch (IOException e) {
+                            System.out.println("Oops! Something went wrong when saving to disk!");
+                        }
                     } catch (NumberFormatException e) {
                         throw new LadisExeception("Please provide a valid task number.");
                     }
