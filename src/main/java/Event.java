@@ -1,29 +1,66 @@
-public class Event extends Task {
-    private final String startDate;
-    private final String endDate;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-    public Event(String description, String startDate, String endDate) {
+public class Event extends Task {
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+
+    public Event(String description, String startDate, String endDate) throws DateTimeParseException {
+        super(description, TaskType.EVENT);
+        
+        String[] startParts = startDate.trim().split(" ");
+        this.startDate = DateTimeParser.parseDate(startParts[0]);
+        this.startTime = startParts.length > 1 ? DateTimeParser.parseTime(startParts[1]) : null;
+        
+        String[] endParts = endDate.trim().split(" ");
+        this.endDate = DateTimeParser.parseDate(endParts[0]);
+        this.endTime = endParts.length > 1 ? DateTimeParser.parseTime(endParts[1]) : null;
+    }
+
+    public Event(String description, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         super(description, TaskType.EVENT);
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
     @Override
     public String toFileString() {
-        return super.toFileString() + " | " + startDate + " | " + endDate;
+        String result = super.toFileString() + " | " + DateTimeParser.serializeDate(startDate);
+        if (startTime != null) {
+            result += " " + DateTimeParser.serializeTime(startTime);
+        }
+        result += " | " + DateTimeParser.serializeDate(endDate);
+        if (endTime != null) {
+            result += " " + DateTimeParser.serializeTime(endTime);
+        }
+        return result;
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (from: " + startDate + " to: " + endDate + ")";
+        String startTimeStr = startTime != null ? ", " + DateTimeParser.formatTime(startTime) : "";
+        String endTimeStr = endTime != null ? ", " + DateTimeParser.formatTime(endTime) : "";
+        return super.toString() + " (from: " + DateTimeParser.formatDate(startDate) + startTimeStr + " to: " + DateTimeParser.formatDate(endDate) + endTimeStr + ")";
     }
 
 }
