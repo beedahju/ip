@@ -63,18 +63,19 @@ public class Storage {
             boolean isDone = parts[1].equals("1");
             String description = parts[2];
 
-            Task task = null;
-
-            if (taskType.equals("T")) {
-                task = new Todo(description);
-            } else if (taskType.equals("D")) {
-                String deadlineDay = parts[3];
-                task = new Deadline(description, deadlineDay);
-            } else if (taskType.equals("E")) {
-                String startDate = parts[3];
-                String endDate = parts[4];
-                task = new Event(description, startDate, endDate);
-            }
+            Task task = switch (taskType) {
+                case "T" -> new Todo(description);
+                case "D" -> {
+                    String deadlineDateStr = parts[3];
+                    yield new Deadline(description, deadlineDateStr);
+                }
+                case "E" -> {
+                    String startDateStr = parts[3];
+                    String endDateStr = parts[4];
+                    yield new Event(description, startDateStr, endDateStr);
+                }
+                default -> null;
+            };
 
             if (task != null && isDone) {
                 task.mark();
