@@ -1,14 +1,23 @@
 package ladis.command;
 
 import java.io.IOException;
+
+import ladis.storage.Storage;
 import ladis.task.TaskList;
 import ladis.task.Todo;
 import ladis.ui.UI;
-import ladis.storage.Storage;
 
+/**
+ * Command to add a new todo task.
+ */
 public class AddTodoCommand extends Command {
     private final String description;
 
+    /**
+     * Constructs an AddTodoCommand with the given description.
+     *
+     * @param description The description of the todo task.
+     */
     public AddTodoCommand(String description) {
         this.description = description;
     }

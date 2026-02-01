@@ -13,6 +13,7 @@ import ladis.command.AddTodoCommand;
 import ladis.command.Command;
 import ladis.command.DeleteCommand;
 import ladis.command.ExitCommand;
+import ladis.command.FindCommand;
 import ladis.command.ListCommand;
 import ladis.command.MarkCommand;
 import ladis.command.UnmarkCommand;
@@ -227,5 +228,45 @@ public class ParserTest {
     void parse_commandWithExtraSpaces() throws LadisException {
         Command command = parser.parse("mark   1");
         assertInstanceOf(MarkCommand.class, command);
+    }
+
+    @Test
+    void parse_findCommand() throws LadisException {
+        Command command = parser.parse("find book");
+        assertInstanceOf(FindCommand.class, command);
+    }
+
+    @Test
+    void getFindKeyword_validKeyword() throws LadisException {
+        String keyword = parser.getFindKeyword("find book");
+        assertEquals("book", keyword);
+    }
+
+    @Test
+    void getFindKeyword_multipleWords() throws LadisException {
+        String keyword = parser.getFindKeyword("find read a book");
+        assertEquals("read a book", keyword);
+    }
+
+    @Test
+    void getFindKeyword_withExtraSpaces() throws LadisException {
+        String keyword = parser.getFindKeyword("find   book");
+        assertEquals("book", keyword);
+    }
+
+    @Test
+    void getFindKeyword_emptyKeyword() {
+        LadisException exception = assertThrows(LadisException.class, () -> {
+            parser.getFindKeyword("find");
+        });
+        assertTrue(exception.getMessage().contains("search keyword"));
+    }
+
+    @Test
+    void getFindKeyword_onlyCommand() {
+        LadisException exception = assertThrows(LadisException.class, () -> {
+            parser.getFindKeyword("find");
+        });
+        assertTrue(exception.getMessage().contains("search keyword"));
     }
 }

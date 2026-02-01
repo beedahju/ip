@@ -1,16 +1,25 @@
 package ladis.command;
 
 import java.io.IOException;
-import ladis.task.TaskList;
-import ladis.task.Event;
-import ladis.ui.UI;
-import ladis.storage.Storage;
-import ladis.exception.LadisException;
-import ladis.exception.DateTimeParseException;
 
+import ladis.exception.DateTimeParseException;
+import ladis.exception.LadisException;
+import ladis.storage.Storage;
+import ladis.task.Event;
+import ladis.task.TaskList;
+import ladis.ui.UI;
+
+/**
+ * Command to add a new event task.
+ */
 public class AddEventCommand extends Command {
     private final String[] eventParts;
 
+    /**
+     * Constructs an AddEventCommand with the given event parts.
+     *
+     * @param eventParts An array containing [description, startDate, endDate].
+     */
     public AddEventCommand(String[] eventParts) {
         this.eventParts = eventParts;
     }

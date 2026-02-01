@@ -1,19 +1,29 @@
 package ladis;
 
 import java.io.IOException;
+
+import ladis.command.Command;
+import ladis.exception.LadisException;
 import ladis.storage.Storage;
 import ladis.task.TaskList;
 import ladis.ui.UI;
 import ladis.util.Parser;
-import ladis.command.Command;
-import ladis.exception.LadisException;
 
+/**
+ * Main entry point and controller for the Ladis task management application.
+ * Manages the main application loop, coordinates between UI, Parser, Storage, and TaskList.
+ */
 public class Ladis {
     private final Storage storage;
     private TaskList tasks;
     private final UI ui;
     private final Parser parser;
 
+    /**
+     * Constructs a Ladis application instance with the specified data file path.
+     *
+     * @param filePath The path to the file where task data is stored.
+     */
     public Ladis(String filePath) {
         this.storage = new Storage(filePath);
         this.ui = new UI();
@@ -21,6 +31,11 @@ public class Ladis {
         this.tasks = new TaskList();
     }
 
+    /**
+     * Runs the main application loop.
+     * Loads tasks from storage, displays welcome message, and continuously processes user commands
+     * until an exit command is received.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -44,6 +59,11 @@ public class Ladis {
         ui.close();
     }
 
+    /**
+     * Entry point for the Ladis application.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         new Ladis("./data/ladis.txt").run();
     }

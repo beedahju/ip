@@ -1,16 +1,25 @@
 package ladis.command;
 
 import java.io.IOException;
-import ladis.task.TaskList;
-import ladis.task.Deadline;
-import ladis.ui.UI;
-import ladis.storage.Storage;
-import ladis.exception.LadisException;
-import ladis.exception.DateTimeParseException;
 
+import ladis.exception.DateTimeParseException;
+import ladis.exception.LadisException;
+import ladis.storage.Storage;
+import ladis.task.Deadline;
+import ladis.task.TaskList;
+import ladis.ui.UI;
+
+/**
+ * Command to add a new deadline task.
+ */
 public class AddDeadlineCommand extends Command {
     private final String[] parts;
 
+    /**
+     * Constructs an AddDeadlineCommand with the given parts.
+     *
+     * @param parts An array containing [description, deadline].
+     */
     public AddDeadlineCommand(String[] parts) {
         this.parts = parts;
     }
