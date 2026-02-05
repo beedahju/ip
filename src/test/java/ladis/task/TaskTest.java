@@ -51,9 +51,9 @@ public class TaskTest {
 
     @Test
     void toFileString_containsStatusAndDescription() {
-        assertTrue(todoTask.toFileString().contains("0 Buy groceries"));
+        assertTrue(todoTask.toFileString().contains("0 | Buy groceries"));
         todoTask.mark();
-        assertTrue(todoTask.toFileString().contains("1 Buy groceries"));
+        assertTrue(todoTask.toFileString().contains("1 | Buy groceries"));
     }
 
     @Test
