@@ -18,7 +18,7 @@ public abstract class Task {
     public Task(String description, TaskType taskType) {
         this.description = description;
         this.taskType = taskType;
-        this.isDone = false;    
+        this.isDone = false;
     }
 
     /**

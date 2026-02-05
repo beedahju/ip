@@ -99,12 +99,6 @@ public class TaskList {
      * @param index The index to validate.
      * @return true if the index is valid, false otherwise.
      */
-    /**
-     * Checks if the given index is valid for this task list.
-     *
-     * @param index The index to validate.
-     * @return true if the index is valid, false otherwise.
-     */
     private boolean isValidIndex(int index) {
         return index >= 0 && index < tasks.size();
     }

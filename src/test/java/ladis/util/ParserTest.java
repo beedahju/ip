@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ import ladis.exception.LadisException;
 
 public class ParserTest {
     private Parser parser;
-    
+
     @BeforeEach
     void setUp() {
         parser = new Parser();
@@ -95,7 +96,7 @@ public class ParserTest {
     void getTaskNumber_validNumber() throws LadisException {
         int taskNum = parser.getTaskNumber("mark 1", "mark");
         assertEquals(0, taskNum);
-        
+
         taskNum = parser.getTaskNumber("mark 5", "mark");
         assertEquals(4, taskNum);
     }

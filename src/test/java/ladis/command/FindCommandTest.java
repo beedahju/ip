@@ -1,6 +1,7 @@
 package ladis.command;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +13,6 @@ import ladis.task.TaskList;
 import ladis.task.Todo;
 import ladis.ui.UI;
 
-/**
- * Test class for FindCommand.
- * Tests the find functionality with various search scenarios.
- */
 public class FindCommandTest {
     private TaskList taskList;
     private UI ui;

@@ -28,7 +28,9 @@ public class AddEventCommand extends Command {
     public boolean execute(TaskList tasks, UI ui, Storage storage) throws LadisException {
         try {
             tasks.addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
-            ui.showTaskAdded("[E][ ] " + eventParts[0] + " (from: " + eventParts[1] + " to: " + eventParts[2] + ")", tasks.size());
+            String eventInfo = "[E][ ] " + eventParts[0] + " (from: " + eventParts[1]
+                    + " to: " + eventParts[2] + ")";
+            ui.showTaskAdded(eventInfo, tasks.size());
             saveToStorage(tasks, ui, storage);
         } catch (DateTimeParseException e) {
             throw new LadisException(e.getMessage());

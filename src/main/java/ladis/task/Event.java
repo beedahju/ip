@@ -86,7 +86,8 @@ public class Event extends Task {
     public String toString() {
         String startTimeStr = startTime != null ? ", " + DateTimeParser.formatTime(startTime) : "";
         String endTimeStr = endTime != null ? ", " + DateTimeParser.formatTime(endTime) : "";
-        return super.toString() + " (from: " + DateTimeParser.formatDate(startDate) + startTimeStr + " to: " + DateTimeParser.formatDate(endDate) + endTimeStr + ")";
+        return super.toString() + " (from: " + DateTimeParser.formatDate(startDate)
+                + startTimeStr + " to: " + DateTimeParser.formatDate(endDate) + endTimeStr + ")";
     }
 
 }
