@@ -17,7 +17,7 @@ import ladis.exception.LadisException;
  * Handles command identification and extraction of command parameters.
  */
 public class Parser {
-    
+
     /**
      * Parses the user input string into a Command object.
      *
@@ -29,16 +29,16 @@ public class Parser {
         String command = getCommand(input);
 
         return switch (command) {
-            case "bye" -> new ExitCommand();
-            case "list" -> new ListCommand();
-            case "mark" -> new MarkCommand(getTaskNumber(input, "mark"));
-            case "unmark" -> new UnmarkCommand(getTaskNumber(input, "unmark"));
-            case "todo" -> new AddTodoCommand(getTodoDescription(input));
-            case "deadline" -> new AddDeadlineCommand(getDeadlineInfo(input));
-            case "event" -> new AddEventCommand(getEventInfo(input));
-            case "delete" -> new DeleteCommand(getTaskNumber(input, "delete"));
-            case "find" -> new FindCommand(getFindKeyword(input));
-            default -> throw new LadisException("I'm sorry, but I don't know what that means :-(");
+        case "bye" -> new ExitCommand();
+        case "list" -> new ListCommand();
+        case "mark" -> new MarkCommand(getTaskNumber(input, "mark"));
+        case "unmark" -> new UnmarkCommand(getTaskNumber(input, "unmark"));
+        case "todo" -> new AddTodoCommand(getTodoDescription(input));
+        case "deadline" -> new AddDeadlineCommand(getDeadlineInfo(input));
+        case "event" -> new AddEventCommand(getEventInfo(input));
+        case "delete" -> new DeleteCommand(getTaskNumber(input, "delete"));
+        case "find" -> new FindCommand(getFindKeyword(input));
+        default -> throw new LadisException("I'm sorry, but I don't know what that means :-(");
         };
     }
 

@@ -58,7 +58,8 @@ public class DateTimeParser {
         } catch (NumberFormatException e) {
             // Fall through to throw exception
         }
-        throw new DateTimeParseException("Invalid time format. Use 24-hour format (HHmm), e.g., 1800 for 6pm, 0900 for 9am");
+        throw new DateTimeParseException(
+                "Invalid time format. Use 24-hour format (HHmm), e.g., 1800 for 6pm, 0900 for 9am");
     }
 
     /**

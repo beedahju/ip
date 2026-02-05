@@ -39,7 +39,7 @@ public class Storage {
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
-        
+
         if (!file.exists()) {
             return tasks;
         }
@@ -102,17 +102,17 @@ public class Storage {
             String description = parts[2];
 
             Task task = switch (taskType) {
-                case "T" -> new Todo(description);
-                case "D" -> {
-                    String deadlineDateStr = parts[3];
-                    yield new Deadline(description, deadlineDateStr);
-                }
-                case "E" -> {
-                    String startDateStr = parts[3];
-                    String endDateStr = parts[4];
-                    yield new Event(description, startDateStr, endDateStr);
-                }
-                default -> null;
+            case "T" -> new Todo(description);
+            case "D" -> {
+                String deadlineDateStr = parts[3];
+                yield new Deadline(description, deadlineDateStr);
+            }
+            case "E" -> {
+                String startDateStr = parts[3];
+                String endDateStr = parts[4];
+                yield new Event(description, startDateStr, endDateStr);
+            }
+            default -> null;
             };
 
             if (task != null && isDone) {
