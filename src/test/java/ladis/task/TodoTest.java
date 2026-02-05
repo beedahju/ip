@@ -31,14 +31,14 @@ public class TodoTest {
     @Test
     void toFileString_returnsTWithOneSpace() {
         Todo todo = new Todo("Buy groceries");
-        assertEquals("T 0 Buy groceries", todo.toFileString());
+        assertEquals("T | 0 | Buy groceries", todo.toFileString());
     }
 
     @Test
     void toFileString_marksCompletedWithX() {
         Todo todo = new Todo("Buy groceries");
         todo.mark();
-        assertEquals("T 1 Buy groceries", todo.toFileString());
+        assertEquals("T | 1 | Buy groceries", todo.toFileString());
     }
 
     @Test
