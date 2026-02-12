@@ -20,7 +20,7 @@ public class AddEventCommand extends Command {
      *
      * @param eventParts An array containing [description, startDate, endDate].
      */
-    public AddEventCommand(String[] eventParts) {
+    public AddEventCommand(String... eventParts) {
         this.eventParts = eventParts;
     }
 

@@ -20,7 +20,7 @@ public class AddDeadlineCommand extends Command {
      *
      * @param parts An array containing [description, deadline].
      */
-    public AddDeadlineCommand(String[] parts) {
+    public AddDeadlineCommand(String... parts) {
         this.parts = parts;
     }
 
