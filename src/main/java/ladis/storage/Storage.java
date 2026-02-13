@@ -79,10 +79,15 @@ public class Storage {
         }
 
         try (FileWriter writer = new FileWriter(file)) {
-            for (Task task : tasks) {
-                assert task != null : "Individual task should not be null when saving";
-                writer.write(task.toFileString() + "\n");
-            }
+            tasks.stream()
+                    .map(Task::toFileString)
+                    .forEach(line -> {
+                        try {
+                            writer.write(line + "\n");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
         }
         assert file.exists() : "File should exist after saving";
     }
