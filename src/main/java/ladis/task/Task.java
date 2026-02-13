@@ -35,6 +35,7 @@ public abstract class Task {
      */
     public void mark() {
         isDone = true;
+        assert isDone : "Task should be marked as done after calling mark()";
     }
 
     /**
@@ -42,6 +43,7 @@ public abstract class Task {
      */
     public void unmark() {
         isDone = false;
+        assert !isDone : "Task should not be marked as done after calling unmark()";
     }
 
     /**

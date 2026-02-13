@@ -53,7 +53,9 @@ public class TaskList {
      * @return The task at the given index.
      */
     public Task getTask(int index) {
-        return tasks.get(index);
+        Task task = tasks.get(index);
+        assert task != null : "Retrieved task should never be null";
+        return task;
     }
 
     /**
@@ -62,7 +64,9 @@ public class TaskList {
      * @return The size of the task list.
      */
     public int size() {
-        return tasks.size();
+        int size = tasks.size();
+        assert size >= 0 : "Task list size should never be negative";
+        return size;
     }
 
     /**
@@ -73,7 +77,10 @@ public class TaskList {
      */
     public void markTask(int index) throws LadisException {
         if (isValidIndex(index)) {
-            tasks.get(index).mark();
+            Task task = tasks.get(index);
+            assert task != null : "Task should exist at valid index";
+            task.mark();
+            assert task.isDone() : "Task should be marked as done after calling mark()";
         } else {
             throw new LadisException("Very funny. Now give me a valid task number.");
         }
@@ -87,7 +94,10 @@ public class TaskList {
      */
     public void unmarkTask(int index) throws LadisException {
         if (isValidIndex(index)) {
-            tasks.get(index).unmark();
+            Task task = tasks.get(index);
+            assert task != null : "Task should exist at valid index";
+            task.unmark();
+            assert !task.isDone() : "Task should not be marked as done after calling unmark()";
         } else {
             throw new LadisException("Very funny. Now give me a valid task number.");
         }

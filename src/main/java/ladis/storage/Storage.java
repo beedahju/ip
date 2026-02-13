@@ -38,6 +38,7 @@ public class Storage {
      */
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
+        assert tasks != null : "Task list should be initialized";
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -58,7 +59,7 @@ public class Storage {
                 }
             }
         }
-
+        assert tasks != null : "Loaded task list should not be null";
         return tasks;
     }
 
@@ -70,6 +71,7 @@ public class Storage {
      * @throws IOException If an I/O error occurs while writing to the file.
      */
     public void save(ArrayList<Task> tasks) throws IOException {
+        assert tasks != null : "Task list to save should not be null";
         File file = new File(filePath);
         File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
@@ -78,9 +80,11 @@ public class Storage {
 
         try (FileWriter writer = new FileWriter(file)) {
             for (Task task : tasks) {
+                assert task != null : "Individual task should not be null when saving";
                 writer.write(task.toFileString() + "\n");
             }
         }
+        assert file.exists() : "File should exist after saving";
     }
 
     /**
@@ -97,17 +101,30 @@ public class Storage {
 
         try {
             String[] parts = line.split(" \\| ");
+            if (parts.length < 3) {
+                return null;
+            }
+            assert parts.length >= 3 : "Parsed task should have at least 3 parts";
             String taskType = parts[0];
             boolean isDone = parts[1].equals("1");
             String description = parts[2];
+            assert !description.isEmpty() : "Task description should not be empty";
 
             Task task = switch (taskType) {
             case "T" -> new Todo(description);
             case "D" -> {
+                if (parts.length < 4) {
+                    yield null;
+                }
+                assert parts.length >= 4 : "Deadline task should have deadline information";
                 String deadlineDateStr = parts[3];
                 yield new Deadline(description, deadlineDateStr);
             }
             case "E" -> {
+                if (parts.length < 5) {
+                    yield null;
+                }
+                assert parts.length >= 5 : "Event task should have start and end date information";
                 String startDateStr = parts[3];
                 String endDateStr = parts[4];
                 yield new Event(description, startDateStr, endDateStr);
@@ -115,8 +132,12 @@ public class Storage {
             default -> null;
             };
 
-            if (task != null && isDone) {
-                task.mark();
+            if (task != null) {
+                assert task.getDescription().equals(description) : "Task description should match parsed description";
+                if (isDone) {
+                    task.mark();
+                    assert task.isDone() : "Task should be marked as done after mark()";
+                }
             }
 
             return task;
