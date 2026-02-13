@@ -80,7 +80,7 @@ public abstract class Task {
      * @return The file representation of the task.
      */
     public String toFileString() {
-        return taskType.getIcon().replaceAll("[\\[\\]]", "") + " | " + (isDone ? "1" : "0") + " | " + description;
+        return taskType.getIconChar() + " | " + (isDone ? "1" : "0") + " | " + description;
     }
 
     /**

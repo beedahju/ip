@@ -36,4 +36,13 @@ public enum TaskType {
     public String getIcon() {
         return this.icon;
     }
+
+    /**
+     * Returns the task type character without brackets (e.g., 'T', 'D', 'E').
+     *
+     * @return The task type character.
+     */
+    public String getIconChar() {
+        return this.icon.substring(1, 2);
+    }
 }
