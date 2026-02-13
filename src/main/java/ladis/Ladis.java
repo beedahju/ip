@@ -1,6 +1,8 @@
 package ladis;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ladis.command.Command;
 import ladis.command.DeleteCommand;
@@ -127,11 +129,9 @@ public class Ladis {
         if (tasks.size() == 0) {
             return "You have no tasks.";
         }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append((i + 1)).append(". ").append(tasks.getTask(i)).append("\n");
-        }
-        return sb.toString();
+        return IntStream.rangeClosed(1, tasks.size())
+                .mapToObj(i -> i + ". " + tasks.getTask(i - 1))
+                .collect(Collectors.joining("\n", "", "\n"));
     }
 
     /**
@@ -141,19 +141,17 @@ public class Ladis {
      * @return Formatted list of matching tasks or no matches message.
      */
     private String handleFindCommand(String input) {
-        String keyword = getKeywordFromInput(input);
-        StringBuilder results = new StringBuilder("Here are the matching tasks in your list:\n");
-        int count = 0;
+        String keyword = getKeywordFromInput(input).toLowerCase();
+        String results = IntStream.range(0, tasks.size())
+                .mapToObj(i -> tasks.getTask(i))
+                .filter(task -> task.getDescription().toLowerCase().contains(keyword))
+                .map(Object::toString)
+                .collect(Collectors.joining("\n", "", ""));
 
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.getTask(i);
-            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                count++;
-                results.append(count).append(". ").append(task.toString()).append("\n");
-            }
+        if (results.isEmpty()) {
+            return "No matching tasks found.";
         }
-
-        return count == 0 ? "No matching tasks found." : results.toString();
+        return "Here are the matching tasks in your list:\n" + results + "\n";
     }
 
     /**
