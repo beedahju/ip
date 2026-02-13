@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import ladis.command.ArchiveCommand;
 import ladis.command.Command;
 import ladis.command.DeleteCommand;
 import ladis.command.ExitCommand;
@@ -111,6 +112,8 @@ public class Ladis {
                 return handleUnmarkCommand(input);
             } else if (command instanceof DeleteCommand) {
                 return handleDeleteCommand(input);
+            } else if (command instanceof ArchiveCommand) {
+                return handleArchiveCommand(input);
             } else {
                 return handleAddCommand(command);
             }
@@ -215,6 +218,29 @@ public class Ladis {
                     + "\nNow you have " + tasks.size() + " task(s) in the list.";
         } catch (IOException e) {
             return "Task deleted, but failed to save: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Handles the archive command by archiving a task to the archive file.
+     *
+     * @param input The user input containing the task index.
+     * @return Status message about the archived task.
+     */
+    private String handleArchiveCommand(String input) {
+        int index = getLastTaskIndexFromMarkCommand(input);
+        if (!isValidTaskIndex(index)) {
+            return "Task archived!";
+        }
+        Task archivedTask = tasks.getTask(index);
+        tasks.removeTask(index);
+        try {
+            storage.saveArchived(archivedTask);
+            storage.save(tasks.getTasks());
+            return "Archived! I've moved this task to the archive:\n  " + archivedTask
+                    + "\nNow you have " + tasks.size() + " task(s) in the list.";
+        } catch (IOException e) {
+            return "Task archived, but failed to save: " + e.getMessage();
         }
     }
 

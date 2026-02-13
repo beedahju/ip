@@ -102,6 +102,20 @@ public class UI {
     }
 
     /**
+     * Displays a message confirming a task has been archived.
+     *
+     * @param task The task that was archived.
+     * @param totalTasks The total number of tasks after archiving.
+     */
+    public void showTaskArchived(String task, int totalTasks) {
+        printDivider();
+        System.out.println("Archived! I've moved this task to the archive:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + totalTasks + " tasks in the list.");
+        printDivider();
+    }
+
+    /**
      * Displays an error message.
      *
      * @param message The error message to display.
