@@ -12,6 +12,13 @@ import ladis.exception.DateTimeParseException;
  */
 public class DateTimeParser {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final int TIME_LENGTH = 4;
+    private static final int HOURS_START_INDEX = 0;
+    private static final int HOURS_END_INDEX = 2;
+    private static final int MINUTES_START_INDEX = 2;
+    private static final int MINUTES_END_INDEX = 4;
+    private static final int HOUR_12 = 12;
+    private static final int HOUR_0 = 0;
 
     /**
      * Parses a date string in format yyyy-MM-dd (e.g., 2019-10-15 or 2019-10-2)
@@ -50,9 +57,9 @@ public class DateTimeParser {
     public static LocalTime parseTime(String timeStr) throws DateTimeParseException {
         try {
             timeStr = timeStr.trim();
-            if (timeStr.length() == 4 && timeStr.matches("\\d{4}")) {
-                int hours = Integer.parseInt(timeStr.substring(0, 2));
-                int minutes = Integer.parseInt(timeStr.substring(2, 4));
+            if (timeStr.length() == TIME_LENGTH && timeStr.matches("\\d{4}")) {
+                int hours = Integer.parseInt(timeStr.substring(HOURS_START_INDEX, HOURS_END_INDEX));
+                int minutes = Integer.parseInt(timeStr.substring(MINUTES_START_INDEX, MINUTES_END_INDEX));
                 return LocalTime.of(hours, minutes);
             }
         } catch (NumberFormatException e) {
@@ -77,16 +84,16 @@ public class DateTimeParser {
         int minute = time.getMinute();
 
         if (minute == 0) {
-            if (hour < 12) {
-                return hour == 0 ? "12am" : hour + "am";
+            if (hour < HOUR_12) {
+                return hour == HOUR_0 ? "12am" : hour + "am";
             } else {
-                return hour == 12 ? "12pm" : (hour - 12) + "pm";
+                return hour == HOUR_12 ? "12pm" : (hour - HOUR_12) + "pm";
             }
         } else {
-            if (hour < 12) {
+            if (hour < HOUR_12) {
                 return hour + ":" + String.format("%02d", minute) + "am";
             } else {
-                int displayHour = hour == 12 ? 12 : hour - 12;
+                int displayHour = hour == HOUR_12 ? HOUR_12 : hour - HOUR_12;
                 return displayHour + ":" + String.format("%02d", minute) + "pm";
             }
         }

@@ -17,6 +17,10 @@ import ladis.exception.LadisException;
  * Handles command identification and extraction of command parameters.
  */
 public class Parser {
+    private static final int TODO_COMMAND_LENGTH = 4;
+    private static final int DEADLINE_COMMAND_LENGTH = 8;
+    private static final int EVENT_COMMAND_LENGTH = 5;
+    private static final int COMMAND_OFFSET = 1; // Space after command
 
     /**
      * Parses the user input string into a Command object.
@@ -64,7 +68,7 @@ public class Parser {
      */
     public int getTaskNumber(String input, String command) throws LadisException {
         try {
-            int startIndex = command.length() + 1;
+            int startIndex = command.length() + COMMAND_OFFSET;
             return Integer.parseInt(input.substring(startIndex).trim()) - 1;
         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
             throw new LadisException("Very funny. Now give me a valid task number.");
@@ -79,10 +83,10 @@ public class Parser {
      * @throws LadisException If no description is provided.
      */
     public String getTodoDescription(String input) throws LadisException {
-        if (input.length() <= 4) {
+        if (input.length() <= TODO_COMMAND_LENGTH) {
             throw new LadisException("Please don't be funny and give me a proper description.");
         }
-        return input.substring(5);
+        return input.substring(TODO_COMMAND_LENGTH + COMMAND_OFFSET);
     }
 
     /**
@@ -96,7 +100,7 @@ public class Parser {
         if (!input.contains(" /by ")) {
             throw new LadisException("So, when is the deadline?");
         }
-        String[] parts = input.substring(9).split(" /by ");
+        String[] parts = input.substring(DEADLINE_COMMAND_LENGTH + COMMAND_OFFSET).split(" /by ");
         if (parts.length != 2) {
             throw new LadisException("Invalid deadline format.");
         }
@@ -115,7 +119,7 @@ public class Parser {
         if (!input.contains(" /from ") || !input.contains(" /to ")) {
             throw new LadisException("Interesting event. When does it start and end?");
         }
-        String[] parts = input.substring(6).split(" /from | /to ");
+        String[] parts = input.substring(EVENT_COMMAND_LENGTH + COMMAND_OFFSET).split(" /from | /to ");
         if (parts.length != 3) {
             throw new LadisException("Invalid event format.");
         }

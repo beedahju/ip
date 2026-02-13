@@ -100,95 +100,154 @@ public class Ladis {
             if (command instanceof ExitCommand) {
                 return "Goodbye! Hope to see you again soon!";
             } else if (command instanceof ListCommand) {
-                if (tasks.size() == 0) {
-                    return "You have no tasks.";
-                }
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < tasks.size(); i++) {
-                    sb.append((i + 1)).append(". ").append(tasks.getTask(i)).append("\n");
-                }
-                return sb.toString();
+                return handleListCommand();
             } else if (command instanceof FindCommand) {
-                // Execute find by manually building results
-                String keyword = getKeywordFromInput(input);
-                StringBuilder results = new StringBuilder("Here are the matching tasks in your list:\n");
-                int count = 0;
-
-                for (int i = 0; i < tasks.size(); i++) {
-                    Task task = tasks.getTask(i);
-                    if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                        count++;
-                        results.append(count).append(". ").append(task.toString()).append("\n");
-                    }
-                }
-
-                if (count == 0) {
-                    return "No matching tasks found.";
-                } else {
-                    return results.toString();
-                }
+                return handleFindCommand(input);
             } else if (command instanceof MarkCommand) {
-                // Get the task index and mark it directly without calling execute() to avoid console output
-                int index = getLastTaskIndexFromMarkCommand(input);
-                if (index >= 0 && index < tasks.size()) {
-                    try {
-                        tasks.markTask(index);
-                        storage.save(tasks.getTasks());
-                    } catch (IOException e) {
-                        return "Task marked, but failed to save: " + e.getMessage();
-                    }
-                    return "Nice! I've marked this task as done:\n  " + tasks.getTask(index);
-                }
-                return "Task marked as done!";
+                return handleMarkCommand(input);
             } else if (command instanceof UnmarkCommand) {
-                // Get the task index and unmark it directly without calling execute() to avoid console output
-                int index = getLastTaskIndexFromMarkCommand(input);
-                if (index >= 0 && index < tasks.size()) {
-                    try {
-                        tasks.unmarkTask(index);
-                        storage.save(tasks.getTasks());
-                    } catch (IOException e) {
-                        return "Task unmarked, but failed to save: " + e.getMessage();
-                    }
-                    return "OK, I've marked this task as not done yet:\n  " + tasks.getTask(index);
-                }
-                return "Task unmarked!";
+                return handleUnmarkCommand(input);
             } else if (command instanceof DeleteCommand) {
-                // Get task info before deletion
-                int index = getLastTaskIndexFromMarkCommand(input);
-                Task deletedTask = null;
-                if (index >= 0 && index < tasks.size()) {
-                    deletedTask = tasks.getTask(index);
-                    tasks.removeTask(index);
-                    try {
-                        storage.save(tasks.getTasks());
-                    } catch (IOException e) {
-                        return "Task deleted, but failed to save: " + e.getMessage();
-                    }
-                }
-                if (deletedTask != null) {
-                    return "Noted. I've removed this task:\n  " + deletedTask
-                            + "\nNow you have " + tasks.size() + " task(s) in the list.";
-                }
-                return "Task deleted!";
+                return handleDeleteCommand(input);
             } else {
-                // For add commands (AddTodoCommand, AddDeadlineCommand, AddEventCommand)
-                int beforeSize = tasks.size();
-                command.execute(tasks, ui, storage);
-                int afterSize = tasks.size();
-
-                if (afterSize > beforeSize) {
-                    // A new task was added
-                    Task newTask = tasks.getTask(afterSize - 1);
-                    return "Got it. I've added this task:\n  " + newTask
-                            + "\nNow you have " + afterSize + " task(s) in the list.";
-                }
-                return "Command executed successfully!";
+                return handleAddCommand(command);
             }
         } catch (LadisException e) {
             commandType = "";
             return "Error: " + e.getMessage();
         }
+    }
+
+    /**
+     * Handles the list command by building a formatted list of all tasks.
+     *
+     * @return Formatted list of tasks or empty list message.
+     */
+    private String handleListCommand() {
+        if (tasks.size() == 0) {
+            return "You have no tasks.";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append((i + 1)).append(". ").append(tasks.getTask(i)).append("\n");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Handles the find command by searching tasks by keyword.
+     *
+     * @param input The user input containing the search keyword.
+     * @return Formatted list of matching tasks or no matches message.
+     */
+    private String handleFindCommand(String input) {
+        String keyword = getKeywordFromInput(input);
+        StringBuilder results = new StringBuilder("Here are the matching tasks in your list:\n");
+        int count = 0;
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.getTask(i);
+            if (task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                count++;
+                results.append(count).append(". ").append(task.toString()).append("\n");
+            }
+        }
+
+        return count == 0 ? "No matching tasks found." : results.toString();
+    }
+
+    /**
+     * Handles the mark command by marking a task as done.
+     *
+     * @param input The user input containing the task index.
+     * @return Status message about the marked task.
+     * @throws LadisException If an error occurs during task marking.
+     */
+    private String handleMarkCommand(String input) throws LadisException {
+        int index = getLastTaskIndexFromMarkCommand(input);
+        if (!isValidTaskIndex(index)) {
+            return "Task marked as done!";
+        }
+        try {
+            tasks.markTask(index);
+            storage.save(tasks.getTasks());
+            return "Nice! I've marked this task as done:\n  " + tasks.getTask(index);
+        } catch (IOException e) {
+            return "Task marked, but failed to save: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Handles the unmark command by marking a task as not done.
+     *
+     * @param input The user input containing the task index.
+     * @return Status message about the unmarked task.
+     * @throws LadisException If an error occurs during task unmarking.
+     */
+    private String handleUnmarkCommand(String input) throws LadisException {
+        int index = getLastTaskIndexFromMarkCommand(input);
+        if (!isValidTaskIndex(index)) {
+            return "Task unmarked!";
+        }
+        try {
+            tasks.unmarkTask(index);
+            storage.save(tasks.getTasks());
+            return "OK, I've marked this task as not done yet:\n  " + tasks.getTask(index);
+        } catch (IOException e) {
+            return "Task unmarked, but failed to save: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Handles the delete command by removing a task from the list.
+     *
+     * @param input The user input containing the task index.
+     * @return Status message about the deleted task.
+     */
+    private String handleDeleteCommand(String input) {
+        int index = getLastTaskIndexFromMarkCommand(input);
+        if (!isValidTaskIndex(index)) {
+            return "Task deleted!";
+        }
+        Task deletedTask = tasks.getTask(index);
+        tasks.removeTask(index);
+        try {
+            storage.save(tasks.getTasks());
+            return "Noted. I've removed this task:\n  " + deletedTask
+                    + "\nNow you have " + tasks.size() + " task(s) in the list.";
+        } catch (IOException e) {
+            return "Task deleted, but failed to save: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Handles add commands by executing the command and returning a status message.
+     *
+     * @param command The add command to execute.
+     * @return Status message about the added task.
+     * @throws LadisException If an error occurs during command execution.
+     */
+    private String handleAddCommand(Command command) throws LadisException {
+        int beforeSize = tasks.size();
+        command.execute(tasks, ui, storage);
+        int afterSize = tasks.size();
+
+        if (afterSize > beforeSize) {
+            Task newTask = tasks.getTask(afterSize - 1);
+            return "Got it. I've added this task:\n  " + newTask
+                    + "\nNow you have " + afterSize + " task(s) in the list.";
+        }
+        return "Command executed successfully!";
+    }
+
+    /**
+     * Checks if a task index is valid for the current task list.
+     *
+     * @param index The index to check.
+     * @return true if the index is valid (non-negative and within bounds).
+     */
+    private boolean isValidTaskIndex(int index) {
+        return index >= 0 && index < tasks.size();
     }
 
     /**
