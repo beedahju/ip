@@ -28,7 +28,7 @@ public class Parser {
     public Command parse(String input) throws LadisException {
         String command = getCommand(input);
 
-        return switch (command) {
+        Command result = switch (command) {
         case "bye" -> new ExitCommand();
         case "list" -> new ListCommand();
         case "mark" -> new MarkCommand(getTaskNumber(input, "mark"));
@@ -40,6 +40,8 @@ public class Parser {
         case "find" -> new FindCommand(getFindKeyword(input));
         default -> throw new LadisException("I'm sorry, but I don't know what that means :-(");
         };
+        assert result != null : "Parsed command should never be null";
+        return result;
     }
 
     /**
@@ -98,6 +100,7 @@ public class Parser {
         if (parts.length != 2) {
             throw new LadisException("Invalid deadline format.");
         }
+        assert parts.length == 2 : "Deadline must have exactly 2 parts: description and deadline";
         return parts;
     }
 
@@ -116,6 +119,7 @@ public class Parser {
         if (parts.length != 3) {
             throw new LadisException("Invalid event format.");
         }
+        assert parts.length == 3 : "Event must have exactly 3 parts: description, start date, and end date";
         return parts;
     }
 

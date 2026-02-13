@@ -91,8 +91,11 @@ public class Ladis {
      */
     public String getResponse(String input) {
         try {
+            assert input != null && !input.trim().isEmpty() : "Input should not be null or empty";
             Command command = parser.parse(input);
+            assert command != null : "Parsed command should not be null";
             commandType = command.getClass().getSimpleName();
+            assert commandType != null && !commandType.isEmpty() : "Command type should be set after parsing";
 
             if (command instanceof ExitCommand) {
                 return "Goodbye! Hope to see you again soon!";
@@ -193,9 +196,12 @@ public class Ladis {
      */
     private int getLastTaskIndexFromMarkCommand(String input) {
         try {
+            assert input != null : "Input should not be null";
             String[] parts = input.trim().split("\\s+");
             if (parts.length > 1) {
-                return Integer.parseInt(parts[1]) - 1; // Convert to 0-indexed
+                int index = Integer.parseInt(parts[1]) - 1; // Convert to 0-indexed
+                assert index >= -1 : "Parsed task index should be a valid integer";
+                return index;
             }
         } catch (NumberFormatException e) {
             // Ignore and return -1
