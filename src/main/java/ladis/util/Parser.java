@@ -3,6 +3,7 @@ package ladis.util;
 import ladis.command.AddDeadlineCommand;
 import ladis.command.AddEventCommand;
 import ladis.command.AddTodoCommand;
+import ladis.command.ArchiveCommand;
 import ladis.command.Command;
 import ladis.command.DeleteCommand;
 import ladis.command.ExitCommand;
@@ -41,6 +42,7 @@ public class Parser {
         case "deadline" -> new AddDeadlineCommand(getDeadlineInfo(input));
         case "event" -> new AddEventCommand(getEventInfo(input));
         case "delete" -> new DeleteCommand(getTaskNumber(input, "delete"));
+        case "archive" -> new ArchiveCommand(getTaskNumber(input, "archive"));
         case "find" -> new FindCommand(getFindKeyword(input));
         default -> throw new LadisException("I'm sorry, but I don't know what that means :-(");
         };

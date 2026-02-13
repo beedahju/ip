@@ -16,9 +16,11 @@ import ladis.task.Todo;
 /**
  * Handles persistence of tasks to and from disk.
  * Manages loading tasks from a file and saving tasks to a file in a text format.
+ * Also manages archiving of completed tasks to a separate archive file.
  */
 public class Storage {
     private final String filePath;
+    private final String archiveFilePath;
 
     /**
      * Constructs a Storage instance with the specified file path.
@@ -27,6 +29,7 @@ public class Storage {
      */
     public Storage(String filePath) {
         this.filePath = filePath;
+        this.archiveFilePath = filePath.replace(".txt", "-archive.txt");
     }
 
     /**
@@ -149,5 +152,52 @@ public class Storage {
         } catch (ArrayIndexOutOfBoundsException | DateTimeParseException e) {
             return null;
         }
+    }
+
+    /**
+     * Saves a single task to the archive file, appending to existing archive.
+     *
+     * @param task The task to archive.
+     * @throws IOException If an I/O error occurs while writing to the file.
+     */
+    public void saveArchived(Task task) throws IOException {
+        assert task != null : "Task to archive should not be null";
+        File file = new File(archiveFilePath);
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(task.toFileString() + "\n");
+        }
+    }
+
+    /**
+     * Loads all archived tasks from the archive file.
+     *
+     * @return An ArrayList of archived tasks.
+     * @throws IOException If an I/O error occurs while reading the file.
+     */
+    public ArrayList<Task> loadArchived() throws IOException {
+        ArrayList<Task> archivedTasks = new ArrayList<>();
+        assert archivedTasks != null : "Archived task list should be initialized";
+        File file = new File(archiveFilePath);
+
+        if (!file.exists()) {
+            return archivedTasks;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Task task = parseTask(line);
+                if (task != null) {
+                    archivedTasks.add(task);
+                }
+            }
+        }
+        assert archivedTasks != null : "Loaded archived task list should not be null";
+        return archivedTasks;
     }
 }
