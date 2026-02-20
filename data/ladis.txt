@@ -1,2 +1,2 @@
-T | 0 | Buy groceries
 D | 0 | read book | 2026-02-05 1800
+E | 0 | Team meeting | 2026-02-20 1000 | 2026-02-20 1100
