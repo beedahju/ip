@@ -71,9 +71,11 @@ public class TaskList {
 
     /**
      * Marks a task as done by index.
+     * Updates the task's completion status and persists the change.
      *
-     * @param index The zero-indexed position of the task to mark.
-     * @throws LadisException If the index is invalid.
+     * @param index The zero-indexed position of the task to mark as done.
+     * @throws LadisException If the index is out of bounds (negative or >= size).
+     *         Provides helpful guidance on valid task indices (1 to size).
      */
     public void markTask(int index) throws LadisException {
         if (isValidIndex(index)) {
@@ -82,15 +84,18 @@ public class TaskList {
             task.mark();
             assert task.isDone() : "Task should be marked as done after calling mark()";
         } else {
-            throw new LadisException("Very funny. Now give me a valid task number.");
+            throw new LadisException("Invalid task number: " + (index + 1) + ". "
+                    + "Valid task numbers are 1 to " + tasks.size() + ".");
         }
     }
 
     /**
      * Marks a task as not done by index.
+     * Reverts the task's completion status and persists the change.
      *
      * @param index The zero-indexed position of the task to unmark.
-     * @throws LadisException If the index is invalid.
+     * @throws LadisException If the index is out of bounds (negative or >= size).
+     *         Provides helpful guidance on valid task indices (1 to size).
      */
     public void unmarkTask(int index) throws LadisException {
         if (isValidIndex(index)) {
@@ -99,7 +104,8 @@ public class TaskList {
             task.unmark();
             assert !task.isDone() : "Task should not be marked as done after calling unmark()";
         } else {
-            throw new LadisException("Very funny. Now give me a valid task number.");
+            throw new LadisException("Invalid task number: " + (index + 1) + ". "
+                    + "Valid task numbers are 1 to " + tasks.size() + ".");
         }
     }
 
