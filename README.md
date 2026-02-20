@@ -2,7 +2,7 @@
 
 Ladis is a **command-line task management application** that helps you organize your to-dos, deadlines, and events efficiently. Simple, fast, and keyboard-driven.
 
-![UI.png](UI.png)
+![Ui.png](Ui.png)
 
 ## Quick Start
 
